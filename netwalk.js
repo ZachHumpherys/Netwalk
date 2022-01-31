@@ -44,9 +44,7 @@ class Board {
         let currentCell = this.getRandomCell();
         const visited = new Set([this.getCellKey(currentCell)]);
 
-        let unvisitedCount = this.rows * this.columns - 1;
-
-        while (unvisitedCount > 0) {
+        while (visited.size < this.totalCells) {
             let crossFlag = false;
 
             const { direction, neighbor } = this.getRandomStep(currentCell);
@@ -54,12 +52,11 @@ class Board {
 
             if (!visited.has(neighborCellKey)) {
                 setEdgePair(currentCell, direction, neighbor, 1);
+                
                 crossFlag = !hasFreeEdge(currentCell);
 
-                if (!crossFlag) {
-                    visited.add(neighborCellKey);
-                    unvisitedCount--;
-                }
+                if (!crossFlag) visited.add(neighborCellKey);
+                
                 else setEdgePair(currentCell, direction, neighbor, -1);
             }
 
