@@ -461,14 +461,8 @@ class Solver extends Board {
             let flag = false;
 
             for (const group of groups) if (this.groups[group].type === 0 && conclude(group) === false) return false;
-
-            const result = this.explore(horizon, changes);
-
-            result.valid = result.valid && this.validate(changes);
-
-            if (result.valid && flag) return sweep(this.getUnsetGroups(horizon));
-
-            return result;
+           
+            return flag ? sweep(this.getUnsetGroups(horizon)) : true;
         }).bind(this);
 
         const horizon = new Set();
