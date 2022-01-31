@@ -145,11 +145,22 @@ class Board {
     }
 
     render() {  
-        let grid = document.getElementById('grid'); 
+        let grid = document.getElementById('grid');
 
-        if (!grid) grid = document.createElement('div');
+        if (grid) {
+            if (grid.rows === this.rows && grid.columns === this.columns) {
+                this.reRender();
+                return;
+            }
+            else document.body.removeChild(grid);
+        }
+
+        grid = document.createElement('div');
 
         grid.id = 'grid';
+        
+        grid.rows = this.rows;
+        grid.columns = this.columns;
 
         grid.style.width = Board.cellSize * this.columns + "px";
         grid.style.height = Board.cellSize * this.rows + "px";
@@ -180,6 +191,14 @@ class Board {
                 img.onclick = boundHandleCellImageClick;
 
                 grid.append(img);
+            }
+        }
+    }
+    
+    reRender() {
+        for (let x = 0; x < this.columns; x++) {
+            for (let y = 0; y < this.rows; y++) {
+                this.updateCellImage({ x, y });
             }
         }
     }
