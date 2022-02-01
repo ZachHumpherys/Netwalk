@@ -466,7 +466,7 @@ class Solver extends Board {
 
                     this.apply(necessaryResult.changes);
 
-                    for (let change of necessaryResult.changes) changes.push(change);
+                    for (const change of necessaryResult.changes) changes.push(change);
 
                     this.mergeInto(necessaryResult.horizon, horizon);
 
