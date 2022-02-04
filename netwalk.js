@@ -325,10 +325,6 @@ class Solver extends Board {
         return positivesFlag ? -1 : negativesFlag ? 1 : 0;
     }
 
-    mergeInto(givingSet, receivingSet) {
-        for (let element of givingSet) if (!receivingSet.has(element)) receivingSet.add(element);
-    }
-
     explore(horizon, changes) {
         const explore = (function(cellKey) {
             const cell = this.getCellFromKey(cellKey);
@@ -462,29 +458,26 @@ class Solver extends Board {
                 const necessaryResult = positiveResult.valid ? negativeResult.valid ? null : positiveResult : negativeResult;
 
                 if (necessaryResult) {
-                    flag = true;
-
                     this.apply(necessaryResult.changes);
 
                     for (const change of necessaryResult.changes) changes.push(change);
 
-                    this.mergeInto(necessaryResult.horizon, horizon);
+                    for (const cellKey of necessaryResult.horizon) horizon.add(cellKey);
 
                     return true;
                 }
             }).bind(this);
 
-            let flag = false;
+            const horizon = new Set();
 
             for (const group of groups) if (this.groups[group].type === 0 && conclude(group) === false) return false;
            
-            return flag ? sweep(this.getUnsetGroups(horizon)) : true;
+            return horizon.size === 0 ? true : sweep(this.getUnsetGroups(horizon));
         }).bind(this);
 
-        const horizon = new Set();
         const changes = [];
 
-        return { valid: sweep(groups), changes, horizon };
+        return { valid: sweep(groups), changes };
     }
 
     getAllUnsetGroups() {
