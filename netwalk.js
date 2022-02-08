@@ -361,9 +361,7 @@ class Solver extends Board {
             return true;
         }).bind(this);
 
-        const valid = exploreAll(horizon);
-
-        return { valid, changes, horizon };
+        return { valid: exploreAll(horizon), changes, horizon };
     }
 
     revert(changes) {
@@ -495,7 +493,7 @@ class Solver extends Board {
             const cell = this.getCellFromKey(cellKey);
             for (let e = 0; e < 4; e++) {
                 const group = this.bindings[cell.x][cell.y][e].group;
-                if (this.groups[group].type === 0 && !groups.has(String(group))) groups.add(String(group));
+                if (this.groups[group].type === 0) groups.add(String(group));
             }
         }
         return groups;
